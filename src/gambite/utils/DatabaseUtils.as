@@ -1,4 +1,4 @@
-package gambite.utils {
+﻿package gambite.utils {
 	import flash.data.SQLConnection;
 	import flash.data.SQLStatement;
 	import flash.events.SQLErrorEvent;
@@ -50,7 +50,7 @@ package gambite.utils {
 			query = "";
 			query += "CREATE TABLE IF NOT EXISTS " +className + " (";
 			query += "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
-			for each (var a:XML in desc.variable) query += a.@name + " " + a.@type + ", ";
+			for each (var a:XML in desc.variable) if(a.@name != "id") query += a.@name + " " + a.@type + ", ";
 			query = query.substring(0, query.length-2);
 			query += ")";
 			
@@ -60,7 +60,7 @@ package gambite.utils {
 			state.execute();
 		}
 		
-		public static function save(obj:Object):void
+		public static function save(obj:Entity):void
 		{
 			var desc:XML;
 			var query:String;
@@ -70,26 +70,58 @@ package gambite.utils {
 			
 			query = "";
 			query += "INSERT INTO " + desc.@name +"(";
-			for each (var a:XML in desc.variable) query += a.@name + ", ";
+			for each (var a:XML in desc.variable) if (a.@name != "id")query += a.@name + ", ";
 			query = query.substring(0, query.length - 2);
 			query += ") VALUES(";
-			for each (var a:XML in desc.variable) query += "'" + obj[a.@name] + "', ";
+			for each (a in desc.variable) if (a.@name != "id") query += "'" + obj[a.@name] + "', ";
 			query = query.substring(0, query.length - 2);
 			query += ")";
-			
-			trace(query);
 			
 			state = new SQLStatement();
 			state.sqlConnection = conn;
 			state.text = query;
-			state.addEventListener(SQLEvent.RESULT, function(e:SQLEvent):void
-			{
-				trace("Berhasil");
-			});
-			state.addEventListener(SQLErrorEvent.ERROR, function(e:SQLErrorEvent):void
-			{
-				trace("Gagal");
-			});
+			state.addEventListener(SQLEvent.RESULT, function(e:SQLEvent):void { trace("Save successfully!") } );
+			state.addEventListener(SQLErrorEvent.ERROR, function(e:SQLErrorEvent):void { trace(e.error.message) } );
+			state.execute();
+		}
+		
+		public static function update(obj:Entity):void
+		{
+			var desc:XML;
+			var query:String;
+			var state:SQLStatement;
+			
+			desc = describeType(obj);
+			
+			query = "";
+			query += "UPDATE " + desc.@name +" SET ";
+			for each (var a:XML in desc.variable) if (a.@name != "id") query += a.@name +"='" + obj[a.@name] + "', ";
+			query = query.substring(0, query.length - 2);
+			query += " WHERE id='" +obj.id +"'";
+			
+			state = new SQLStatement();
+			state.sqlConnection = conn;
+			state.text = query;
+			state.addEventListener(SQLEvent.RESULT, function(e:SQLEvent):void { trace("Update successfully!") } );
+			state.addEventListener(SQLErrorEvent.ERROR, function(e:SQLErrorEvent):void { trace(e.error.message) } );
+			state.execute();
+		}
+		
+		public static function remove(obj:Entity):void
+		{
+			var desc:XML;
+			var query:String;
+			var state:SQLStatement;
+			
+			desc = describeType(obj);
+			
+			query = "DELETE FROM " + desc.@name + " WHERE id='" + obj.id + "'";
+			
+			state = new SQLStatement();
+			state.sqlConnection = conn;
+			state.text = query;
+			state.addEventListener(SQLEvent.RESULT, function(e:SQLEvent):void { trace("Remove successfully!") } );
+			state.addEventListener(SQLErrorEvent.ERROR, function(e:SQLErrorEvent):void { trace(e.error.message) } );
 			state.execute();
 		}
 		
