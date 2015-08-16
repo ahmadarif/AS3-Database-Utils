@@ -6,7 +6,7 @@ Access your local database using Action Script 3.
 1. Initialize database
 	DatabaseUtils.loadDatabase("Person");
 	
-2. Create class that represent Table, ex:
+2. Create class that represent Table
 	public class Person extends Entity
 	{
 		public var name:String;
@@ -35,5 +35,4 @@ Access your local database using Action Script 3.
 6. Remove data
 	var person:Person = new Person();
 	person.id = 1;
-	
 	DatabaseUtils.remove(person);
