@@ -10,6 +10,7 @@ package
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
 	import gambite.utils.DatabaseUtils;
+	import gambite.utils.Entity;
 	
 	/**
 	 * ...
@@ -32,15 +33,25 @@ package
 			person.name = "Ahmad Arif";
 			person.age = 23;
 			person.mail = "ahmad.arif019@gmail.com";
-			DatabaseUtils.save(person);
+			//DatabaseUtils.save(person);
 			
 			person.id = 1;
 			person.name = "AA";
 			person.age = 100;
 			person.mail = "aa.com";
-			DatabaseUtils.update(person);
+			//DatabaseUtils.update(person);
 			
-			DatabaseUtils.remove(person);
+			//DatabaseUtils.remove(person);
+			
+			var result:Array = DatabaseUtils.getAll(Person);
+			for (var i:uint = 0; i < result.length; i++)
+			{
+				trace(result[i].name);
+			}
+			
+			trace("\nGet By Id");
+			var obj:Object = DatabaseUtils.getById(Person, 1);
+			trace("Name = " + obj.name);
 		}
 		
 		private function deactivate(e:Event):void 
