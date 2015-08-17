@@ -1,4 +1,4 @@
-﻿package  
+﻿package gambite 
 {
 	import flash.display.Sprite;
 	import gambite.utils.DatabaseUtils;
