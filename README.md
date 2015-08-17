@@ -36,3 +36,20 @@ Access your local database using Action Script 3.
 	var person:Person = new Person();
 	person.id = 1;
 	DatabaseUtils.remove(person);
+	
+7. Get all data
+	var result:Array = DatabaseUtils.getAll(Person);
+	if(result != null)
+	{
+		for (var i:uint = 0; i < result.length; i++)
+		{
+			trace(result[i].name);
+		}
+	}
+	
+8. Get data by id
+	var obj:Object = DatabaseUtils.getById(Person, 1);
+	if(obj != null)
+	{
+		trace(obj.name);
+	}
