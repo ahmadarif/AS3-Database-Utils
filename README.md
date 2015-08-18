@@ -2,6 +2,8 @@
 Access your local database using Action Script 3.
 
 # Getting started
+	- Add AS3-Database-Utils.swc to Your project
+	- Let's implement the code below
 
 # Initialize database
 	DatabaseUtils.loadDatabase("Person");
@@ -37,7 +39,7 @@ Access your local database using Action Script 3.
 	person.id = 1;
 	DatabaseUtils.remove(person);
 	
-7. Get all data
+# Get all data
 	var result:Array = DatabaseUtils.getAll(Person);
 	if(result != null)
 	{
@@ -48,6 +50,9 @@ Access your local database using Action Script 3.
 		}
 	}
 	
-8. Get data by id
+# Get data by id
 	var obj:Person = DatabaseUtils.getById(Person, 2);
-	if(obj != null) trace("Name = " + obj.name);
+	if(obj != null) 
+	{
+		trace("Name = " + obj.name);
+	}
