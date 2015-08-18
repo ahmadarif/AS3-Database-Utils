@@ -26,32 +26,49 @@
 			stage.align = StageAlign.TOP_LEFT;
 			stage.addEventListener(Event.DEACTIVATE, deactivate);
 		
-			DatabaseUtils.loadDatabase("Person");
+			trace("Configuration");
+			DatabaseUtils.loadDatabase("MyDatabase");
 			DatabaseUtils.registerClass(Person);
 			
+			trace("   ");
+			trace("Save");
 			var person:Person = new Person();
 			person.name = "Ahmad Arif";
 			person.age = 23;
 			person.mail = "ahmad.arif019@gmail.com";
-			//DatabaseUtils.save(person);
+			DatabaseUtils.save(person);
 			
+			trace("   ");
+			trace("Update");
+			var person:Person = new Person();
 			person.id = 1;
-			person.name = "AA";
-			person.age = 100;
-			person.mail = "aa.com";
-			//DatabaseUtils.update(person);
+			person.name = "Arif Ahmad";
+			person.age = 17;
+			person.mail = "ahmad_arif@icloud.com";
+			DatabaseUtils.update(person);
 			
-			//DatabaseUtils.remove(person);
+			trace("   ");
+			trace("Remove");
+			var person:Person = new Person();
+			person.id = 1;
+			DatabaseUtils.remove(person);
 			
+			trace("   ");
+			trace("Get All");
 			var result:Array = DatabaseUtils.getAll(Person);
-			for (var i:uint = 0; i < result.length; i++)
+			if(result != null)
 			{
-				trace(result[i].name);
-			}
+				for (var i:uint = 0; i < result.length; i++)
+				{
+					var tmp:Person = result[i];
+					trace(tmp.name);
+				}
+			}	
 			
+			trace("   ");
 			trace("\nGet By Id");
-			var obj:Object = DatabaseUtils.getById(Person, 1);
-			trace("Name = " + obj.name);
+			var obj:Person = DatabaseUtils.getById(Person, 2);
+			if(obj != null) trace("Name = " + obj.name);
 		}
 		
 		private function deactivate(e:Event):void 

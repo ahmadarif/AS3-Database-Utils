@@ -3,10 +3,10 @@ Access your local database using Action Script 3.
 
 # Getting started
 
-1. Initialize database
+# Initialize database
 	DatabaseUtils.loadDatabase("Person");
 	
-2. Create class that represent Table
+# Create class that represent Table
 	public class Person extends Entity
 	{
 		public var name:String;
@@ -14,25 +14,25 @@ Access your local database using Action Script 3.
 		public var mail:String;
 	}
 	
-3. Register class/entity
+# Register class/entity
 	DatabaseUtils.registerClass(Person);
 
-4. Save data
+# Save data
 	var person:Person = new Person();
 	person.name = "Ahmad Arif";
 	person.age = 23;
 	person.mail = "ahmad.arif019@gmail.com";
 	DatabaseUtils.save(person);
 	
-5. Update data
+# Update data
 	var person:Person = new Person();
 	person.id = 1;
-	person.name = "AA";
+	person.name = "Arif Ahmad";
 	person.age = 100;
-	person.mail = "aa.com";
+	person.mail = "ahmad_arif@icloud.com";
 	DatabaseUtils.update(person);
 	
-6. Remove data
+# Remove data
 	var person:Person = new Person();
 	person.id = 1;
 	DatabaseUtils.remove(person);
@@ -43,13 +43,11 @@ Access your local database using Action Script 3.
 	{
 		for (var i:uint = 0; i < result.length; i++)
 		{
-			trace(result[i].name);
+			var tmp:Person = result[i];
+			trace(tmp.name);
 		}
 	}
 	
 8. Get data by id
-	var obj:Object = DatabaseUtils.getById(Person, 1);
-	if(obj != null)
-	{
-		trace(obj.name);
-	}
+	var obj:Person = DatabaseUtils.getById(Person, 2);
+	if(obj != null) trace("Name = " + obj.name);

@@ -6,6 +6,7 @@
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	import flash.utils.describeType;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	
 	/**
@@ -159,10 +160,13 @@
 		{
 			if (!hasInstance) throw new Error("Error : Panggil fungsi loadDatabase terlebih dahulu!");
 			
+			var desc:XML;
 			var result:Array;
 			var query:String;
 			var className:String;
 			var state:SQLStatement;
+			
+			desc = describeType(new obj());
 			
 			className = getQualifiedClassName(obj);
 			className.slice(className.lastIndexOf("::") + 2);
@@ -180,7 +184,9 @@
 					result = new Array();
 					for (var i:uint = 0; i < sqlResult.data.length; i++)
 					{
-						result.push(sqlResult.data[i]);
+						var entity:* = new obj();
+						for each (var a:XML in desc.variable) entity[a.@name] = sqlResult.data[i][a.@name];
+						result.push(entity);
 					}
 				}
 			});
@@ -196,14 +202,17 @@
 		 * @param	id id entitas
 		 * @return mengirim data entitas sesuai dengan id yang dilewatkan ke dalam parameter, mengirim null jika tidak ada data yang dicari
 		 */
-		public static function getById(obj:Class, id:int):Object
+		public static function getById(obj:Class, id:int):*
 		{
 			if (!hasInstance) throw new Error("Error : Panggil fungsi loadDatabase terlebih dahulu!");
 			
+			var entity:*;
+			var desc:XML;
 			var query:String;
-			var result:Object;
 			var className:String;
 			var state:SQLStatement;
+			
+			desc = describeType(new obj());
 			
 			className = getQualifiedClassName(obj);
 			className.slice(className.lastIndexOf("::") + 2);
@@ -216,12 +225,16 @@
 			state.addEventListener(SQLEvent.RESULT, function(e:SQLEvent):void
 			{
 				var sqlResult:SQLResult = state.getResult();
-				if(sqlResult.data != null) result = sqlResult.data[0];
+				if (sqlResult.data != null)
+				{
+					entity = new obj();
+					for each (var a:XML in desc.variable) entity[a.@name] = sqlResult.data[0][a.@name];
+				}
 			});
 			state.addEventListener(SQLErrorEvent.ERROR, function(e:SQLErrorEvent):void { trace(e.error.message); } );
 			state.execute();
 			
-			return result;
+			return entity;
 		}
 		
 	}
