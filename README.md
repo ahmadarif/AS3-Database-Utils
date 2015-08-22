@@ -4,13 +4,6 @@ Access your local database using Action Script 3.
 # Getting started
 	- Add AS3-Database-Utils.swc to Your project
 	- Let's implement the code below
-
-# Initialize database
-	DatabaseUtils.loadDatabase("Person");
-	
-# Register Entity
-	DatabaseUtils.registerEntity(Person); // one Entity
-	DatabaseUtils.registerEntitys([Person, Animal]); // many Entity
 	
 # Create class that represent Table
 	public class Person extends Entity
@@ -19,6 +12,13 @@ Access your local database using Action Script 3.
 		public var age:uint;
 		public var mail:String;
 	}
+	
+# Initialize database
+	DatabaseUtils.loadDatabase("Person");
+	
+# Register Entity
+	DatabaseUtils.registerEntity(Person); // one Entity
+	DatabaseUtils.registerEntitys([Person, Animal]); // many Entity
 
 # Save data
 	var person:Person = new Person();
