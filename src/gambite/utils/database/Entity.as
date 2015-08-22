@@ -1,4 +1,4 @@
-package gambite.utils 
+package gambite.utils.database 
 {
 	/**
 	 * ...

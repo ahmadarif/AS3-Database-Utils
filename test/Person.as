@@ -1,6 +1,6 @@
 package  
 {
-	import gambite.utils.Entity;
+	import gambite.utils.database.Entity;
 	/**
 	 * ...
 	 * @author Ahmad Arif

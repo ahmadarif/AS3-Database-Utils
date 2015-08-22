@@ -1,4 +1,5 @@
-﻿package gambite.utils {
+﻿package gambite.utils.database 
+{
 	import flash.data.SQLConnection;
 	import flash.data.SQLResult;
 	import flash.data.SQLStatement;
@@ -14,7 +15,7 @@
 	 * @author Ahmad Arif
 	 * @mail ahmad.arif019@gmail.com
 	 */
-	public class DatabaseUtils 
+	public class Db 
 	{
 		private static var hasInstance:Boolean = false;	
 		private static var conn:SQLConnection;
@@ -53,7 +54,7 @@
 			desc = describeType(new obj());
 			
 			className = getQualifiedClassName(obj);
-			className.slice(className.lastIndexOf("::") + 2);
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
 			
 			query = "";
 			query += "CREATE TABLE IF NOT EXISTS " +className + " (";

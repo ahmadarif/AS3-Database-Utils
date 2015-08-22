@@ -9,8 +9,8 @@
 	import flash.events.SQLEvent;
 	import flash.ui.Multitouch;
 	import flash.ui.MultitouchInputMode;
-	import gambite.utils.DatabaseUtils;
-	import gambite.utils.Entity;
+	import gambite.utils.database.Db;
+	import gambite.utils.database.Entity;
 	
 	/**
 	 * ...
@@ -27,8 +27,8 @@
 			stage.addEventListener(Event.DEACTIVATE, deactivate);
 		
 			trace("Configuration");
-			DatabaseUtils.loadDatabase("MyDatabase");
-			DatabaseUtils.registerClass(Person);
+			Db.loadDatabase("MyDatabase");
+			Db.registerClass(Person);
 			
 			trace("   ");
 			trace("Save");
@@ -36,7 +36,7 @@
 			person.name = "Ahmad Arif";
 			person.age = 23;
 			person.mail = "ahmad.arif019@gmail.com";
-			DatabaseUtils.save(person);
+			Db.save(person);
 			
 			trace("   ");
 			trace("Update");
@@ -45,17 +45,17 @@
 			person.name = "Arif Ahmad";
 			person.age = 17;
 			person.mail = "ahmad_arif@icloud.com";
-			DatabaseUtils.update(person);
+			Db.update(person);
 			
 			trace("   ");
 			trace("Remove");
 			var person:Person = new Person();
 			person.id = 1;
-			DatabaseUtils.remove(person);
+			Db.remove(person);
 			
 			trace("   ");
 			trace("Get All");
-			var result:Array = DatabaseUtils.getAll(Person);
+			var result:Array = Db.getAll(Person);
 			if(result != null)
 			{
 				for (var i:uint = 0; i < result.length; i++)
@@ -67,7 +67,7 @@
 			
 			trace("   ");
 			trace("\nGet By Id");
-			var obj:Person = DatabaseUtils.getById(Person, 2);
+			var obj:Person = Db.getById(Person, 2);
 			if(obj != null) trace("Name = " + obj.name);
 		}
 		
