@@ -42,7 +42,7 @@
 		 * Membuat tabel baru jika belum ada
 		 * @param	obj variabel untuk tabel yang akan dibuat
 		 */
-		public static function registerClass(obj:Class):void
+		public static function registerEntity(obj:Class):void
 		{
 			if (!hasInstance) throw new Error("Error : Panggil fungsi loadDatabase terlebih dahulu!");
 			
@@ -67,6 +67,40 @@
 			state.sqlConnection = conn;
 			state.text = query;
 			state.execute();
+		}
+		
+		/**
+		 * Membuat tabel baru jika belum ada
+		 * @param	objs variabel untuk tabel yang akan dibuat
+		 */
+		public static function registerEntitys(objs:Array):void
+		{
+			if (!hasInstance) throw new Error("Error : Panggil fungsi loadDatabase terlebih dahulu!");
+			
+			for (var i:uint = 0; i < objs.length; i++)
+			{
+				var desc:XML;
+				var className:String;
+				var query:String;
+				var state:SQLStatement;
+				
+				desc = describeType(new objs[i]());
+				
+				className = getQualifiedClassName(objs[i]);
+				className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
+				
+				query = "";
+				query += "CREATE TABLE IF NOT EXISTS " +className + " (";
+				query += "id INTEGER PRIMARY KEY AUTOINCREMENT, ";
+				for each (var a:XML in desc.variable) if(a.@name != "id") query += a.@name + " " + a.@type + ", ";
+				query = query.substring(0, query.length-2);
+				query += ")";
+				
+				state = new SQLStatement();
+				state.sqlConnection = conn;
+				state.text = query;
+				state.execute();
+			}
 		}
 		
 		/**

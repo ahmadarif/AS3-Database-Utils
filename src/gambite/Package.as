@@ -7,7 +7,10 @@
 	
 	public class Package extends Sprite
 	{	
-		protected var build:Array = [Db, Entity];
+		public function Package() 
+		{
+			var build:Array = [Db, Entity];
+		}
 	}
 	
 }

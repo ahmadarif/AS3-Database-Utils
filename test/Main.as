@@ -28,7 +28,7 @@
 		
 			trace("Configuration");
 			Db.loadDatabase("MyDatabase");
-			Db.registerClass(Person);
+			Db.registerEntitys([Person, Animal]);
 			
 			trace("   ");
 			trace("Save");
