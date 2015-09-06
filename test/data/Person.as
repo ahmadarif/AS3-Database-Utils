@@ -1,4 +1,4 @@
-package  
+package  data
 {
 	import gambite.utils.database.Entity;
 	/**

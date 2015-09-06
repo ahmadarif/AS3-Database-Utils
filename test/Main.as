@@ -12,6 +12,8 @@
 	import gambite.utils.database.Db;
 	import gambite.utils.database.Entity;
 	
+	import data.Person;
+	
 	/**
 	 * ...
 	 * @author Ahmad Arif
@@ -68,7 +70,19 @@
 			trace("   ");
 			trace("\nGet By Id");
 			var obj:Person = Db.getById(Person, 2);
-			if(obj != null) trace("Name = " + obj.name);
+			if (obj != null) trace("Name = " + obj.name);
+			
+			var tes:Person = new Person();
+			tes.name = "Ahmad Arif";
+			result = Db.getByObject(Person, tes);
+			if(result != null)
+			{
+				for (var i:uint = 0; i < result.length; i++)
+				{
+					var tmp:Person = result[i];
+					trace(tmp.name);
+				}
+			}	
 		}
 		
 		private function deactivate(e:Event):void 

@@ -14,18 +14,18 @@ Access your local database using Action Script 3.
 	}
 	
 # Initialize database
-	DatabaseUtils.loadDatabase("Person");
+	Db.loadDatabase("Person");
 	
 # Register Entity
-	DatabaseUtils.registerEntity(Person); // one Entity
-	DatabaseUtils.registerEntitys([Person, Animal]); // many Entity
+	Db.registerEntity(Person); // one Entity
+	Db.registerEntitys([Person, Animal]); // many Entity
 
 # Save data
 	var person:Person = new Person();
 	person.name = "Ahmad Arif";
 	person.age = 23;
 	person.mail = "ahmad.arif019@gmail.com";
-	DatabaseUtils.save(person);
+	Db.save(person);
 	
 # Update data
 	var person:Person = new Person();
@@ -33,15 +33,15 @@ Access your local database using Action Script 3.
 	person.name = "Arif Ahmad";
 	person.age = 100;
 	person.mail = "ahmad_arif@icloud.com";
-	DatabaseUtils.update(person);
+	Db.update(person);
 	
 # Remove data
 	var person:Person = new Person();
 	person.id = 1;
-	DatabaseUtils.remove(person);
+	Db.remove(person);
 	
 # Get all data
-	var result:Array = DatabaseUtils.getAll(Person);
+	var result:Array = Db.getAll(Person);
 	if(result != null)
 	{
 		for (var i:uint = 0; i < result.length; i++)
@@ -52,8 +52,19 @@ Access your local database using Action Script 3.
 	}
 	
 # Get data by id
-	var obj:Person = DatabaseUtils.getById(Person, 2);
+	var obj:Person = Db.getById(Person, 2);
 	if(obj != null) 
 	{
 		trace("Name = " + obj.name);
+	}
+	
+# Get data by object
+	var result:Array = Db.getByObject(Person);
+	if(result != null)
+	{
+		for (var i:uint = 0; i < result.length; i++)
+		{
+			var tmp:Person = result[i];
+			trace(tmp.name);
+		}
 	}

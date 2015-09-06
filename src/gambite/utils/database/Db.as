@@ -113,12 +113,16 @@
 			
 			var desc:XML;
 			var query:String;
+			var className:String;
 			var state:SQLStatement;
 			
 			desc = describeType(obj);
 			
+			className = desc.@name;
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
+			
 			query = "";
-			query += "INSERT INTO " + desc.@name +"(";
+			query += "INSERT INTO " + className +"(";
 			for each (var a:XML in desc.variable) if (a.@name != "id")query += a.@name + ", ";
 			query = query.substring(0, query.length - 2);
 			query += ") VALUES(";
@@ -144,12 +148,16 @@
 			
 			var desc:XML;
 			var query:String;
+			var className:String;
 			var state:SQLStatement;
 			
 			desc = describeType(obj);
 			
+			className = desc.@name;
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
+			
 			query = "";
-			query += "UPDATE " + desc.@name +" SET ";
+			query += "UPDATE " + className +" SET ";
 			for each (var a:XML in desc.variable) if (a.@name != "id") query += a.@name +"='" + obj[a.@name] + "', ";
 			query = query.substring(0, query.length - 2);
 			query += " WHERE id='" +obj.id +"'";
@@ -172,11 +180,15 @@
 			
 			var desc:XML;
 			var query:String;
+			var className:String;
 			var state:SQLStatement;
 			
 			desc = describeType(obj);
 			
-			query = "DELETE FROM " + desc.@name + " WHERE id='" + obj.id + "'";
+			className = desc.@name;
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
+			
+			query = "DELETE FROM " + className + " WHERE id='" + obj.id + "'";
 			
 			state = new SQLStatement();
 			state.sqlConnection = conn;
@@ -204,7 +216,7 @@
 			desc = describeType(new obj());
 			
 			className = getQualifiedClassName(obj);
-			className.slice(className.lastIndexOf("::") + 2);
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
 			
 			query = "SELECT * FROM " + className + " ORDER BY id";
 			
@@ -250,7 +262,7 @@
 			desc = describeType(new obj());
 			
 			className = getQualifiedClassName(obj);
-			className.slice(className.lastIndexOf("::") + 2);
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
 			
 			query = "SELECT * FROM " + className + " WHERE id='" + id + "'";
 			
@@ -270,6 +282,54 @@
 			state.execute();
 			
 			return entity;
+		}
+		
+		public static function getByObject(obj:Class, object:Entity):Array
+		{
+			if (!hasInstance) throw new Error("Error : Panggil fungsi loadDatabase terlebih dahulu!");
+			
+			var result:Array;
+			var desc:XML;
+			var query:String;
+			var className:String;
+			var state:SQLStatement;
+			
+			desc = describeType(object);
+			
+			className = desc.@name;
+			className = className.substring((className.lastIndexOf("::") == -1 ? -2 : className.lastIndexOf("::")) + 2, className.length);
+			
+			query = "SELECT * FROM " + className + " WHERE ";
+			for each (var a:XML in desc.variable) 
+			{
+				if (object[a.@name] != null && object[a.@name] != 0 && object[a.@name] != "") 
+				{
+					query += a.@name + "='" + object[a.@name] + "' AND ";
+				}
+			}
+			query = query.substring(0, query.length - 5 );
+			
+			state = new SQLStatement();
+			state.sqlConnection = conn;
+			state.text = query;
+			state.addEventListener(SQLEvent.RESULT, function(e:SQLEvent):void
+			{
+				var sqlResult:SQLResult = state.getResult();
+				if (sqlResult.data != null)
+				{
+					result = new Array();
+					for (var i:uint = 0; i < sqlResult.data.length; i++)
+					{
+						var entity:* = new obj();
+						for each (var a:XML in desc.variable) entity[a.@name] = sqlResult.data[i][a.@name];
+						result.push(entity);
+					}
+				}
+			});
+			state.addEventListener(SQLErrorEvent.ERROR, function(e:SQLErrorEvent):void { trace(e.error.message); } );
+			state.execute();
+			
+			return result;
 		}
 		
 	}
